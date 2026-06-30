@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Upload, Loader2, AlertCircle, Code } from "lucide-react";
 import {
   Select,
@@ -19,8 +18,7 @@ const LANGUAGES = [
   { value: "nextjs", label: "Next.js" },
 ] as const;
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY);
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 export const Image2CodePage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -83,19 +81,43 @@ export const Image2CodePage = () => {
       });
 
       const base64Image = await toBase64(selectedImage);
-      const imagePart = {
-        inlineData: {
-          data: base64Image,
-          mimeType: selectedImage.type,
-        },
-      };
 
-      const prompt = `Generate ${selectedLanguage.toUpperCase()} code for this image.`;
+      const prompt = `Generate ${selectedLanguage.toUpperCase()} code for this image. Provide clean, well-structured, production-ready code.`;
       
-      const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
-      const result = await model.generateContent([prompt, imagePart]);
-      
-      setGeneratedCode(await result.response.text());
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "meta-llama/llama-4-scout-17b-16e-instruct",
+          messages: [
+            {
+              role: "user",
+              content: [
+                { type: "text", text: prompt },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${selectedImage.type};base64,${base64Image}`,
+                  },
+                },
+              ],
+            },
+          ],
+          max_tokens: 4096,
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData?.error?.message || `API request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      setGeneratedCode(data.choices?.[0]?.message?.content || "No code generated.");
     } catch (error: any) {
       const msg = error?.message || String(error);
       setError(`Error: ${msg}`);
