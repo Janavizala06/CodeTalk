@@ -331,7 +331,7 @@ const CodeWithAi: React.FC = () => {
     try {
       const fullText = await generateResponse(
         query,
-        (chunk, currentFullText) => {
+        (_chunk, currentFullText) => {
           updateBotMessage(user?.uid || '', botMessageId, currentFullText);
           scrollToBottom();
         },

@@ -79,7 +79,7 @@ export const useChatHistory = () => {
     }
   };
 
-  const updateBotMessage = async (userId: string, messageId: string, content: string) => {
+  const updateBotMessage = async (_userId: string, messageId: string, content: string) => {
     setMessages((prev) => 
       prev.map(msg => msg.id === messageId ? { ...msg, content } : msg)
     );
