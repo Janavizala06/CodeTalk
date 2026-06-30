@@ -199,7 +199,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 1. Clone the repository
 ```bash
-git clone https://github.com/vedpatil1345/Codetalk.git
+git clone https://github.com/Janavizala06/CodeTalk.git
 cd Codetalk
 ```
 
@@ -275,8 +275,9 @@ We welcome contributions to improve CodeTalk! Please follow these steps:
 ## Support and Contact
 
 ### Lead Developer
-Ved Patil
-- Email: vedpatil13042005@gmail.com
-- LinkedIn: [Ved Patil](https://www.linkedin.com/in/ved-patila71968250)
+Janavi Zala
+- Email: janavizala0612@gmail.com
+- LinkedIn: [Janavi Zala](https://www.linkedin.com/in/janavi-zala)
+- GitHub: [Janavizala06](https://github.com/Janavizala06)
 
 
