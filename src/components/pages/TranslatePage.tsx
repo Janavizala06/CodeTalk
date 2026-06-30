@@ -43,36 +43,36 @@ export const TranslatePage: React.FC = () => {
   };
 
   return (
-    <div className="h-[80vh] w-[95vw] mx-auto w-full bg-transparent px-4 md:px-0 flex flex-col">
+    <div className="h-[80vh] w-[95vw] mx-auto bg-transparent px-4 md:px-0 flex flex-col">
       <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-blue-500 dark:from-blue-400 dark:to-blue-300">
         Code Translation Tool
       </h1>
 
-      <div className="flex flex-col lg:flex-row gap-4 h-full overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
         {/* Input Section */}
-        <div className="w-full lg:w-1/3 flex flex-col bg-slate-200/50 dark:bg-slate-900/50 p-4 rounded-lg border-2 border-slate-900/30 dark:border-slate-300/30 shadow-md overflow-auto">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 h-full relative">
-            <div className="flex-grow min-h-[40%] relative">
-              <label className="block text-xl font-medium mb-2">Code</label>
+        <div className="w-full lg:w-1/3 flex flex-col bg-slate-200/50 dark:bg-slate-900/50 p-4 rounded-lg border-2 border-slate-900/30 dark:border-slate-300/30 shadow-md">
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <label className="block text-xl font-medium mb-2">Code</label>
+            <div className="flex-1 min-h-0 mb-4">
               <CodeSection
                 name="code"
                 placeholder="Paste your code here..."
                 required
-                className="h-full min-h-[250px]"
+                className="h-full"
               />
             </div>
             
-            <div>
-              <label className="block text-xl font-medium mb-2">Target Language</label>
+            <div className="mb-4">
+              <label className="block text-xl font-medium mb-2">Language</label>
               <Input 
                 className="w-full border-2 border-slate-900/30 dark:border-slate-300/50" 
-                placeholder="Enter target language/library/framework" 
+                placeholder="Enter target language..." 
                 name="language"
                 defaultValue={targetLanguage}
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 mt-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 type="submit" 
                 className="w-full sm:w-2/3 bg-blue-500 hover:bg-blue-600 text-white"
@@ -94,8 +94,8 @@ export const TranslatePage: React.FC = () => {
 
         {/* Translation Results Section */}
         <div className="w-full lg:w-2/3 flex flex-col bg-slate-200/50 dark:bg-slate-900/50 p-4 rounded-lg border-2 border-slate-900/30 dark:border-slate-300/30 overflow-hidden">
-          <h2 className="text-lg font-bold mb-2">Translation:</h2>
-          <div className="flex-grow overflow-auto">
+          <h2 className="text-xl font-bold mb-2">Translation</h2>
+          <div className="flex-1 min-h-0 overflow-auto">
             {isLoading ? (
               <div className="flex justify-center items-center h-full">
                 <Loader2 className="h-8 w-8 animate-spin" />
