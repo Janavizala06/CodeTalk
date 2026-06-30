@@ -84,7 +84,7 @@ export const CodeSection = ({
   };
 
   return (
-    <div className="h-fit lg:h-auto rounded-lg overflow-hidden border border-gray-500 dark:border-gray-700 bg-gray-200/50 dark:bg-slate-900/70 backdrop-blur-3xl shadow-lg flex flex-col">
+    <div className="h-full rounded-lg overflow-hidden border border-gray-500 dark:border-gray-700 bg-gray-200/50 dark:bg-slate-900/70 backdrop-blur-3xl shadow-lg flex flex-col">
       <div className="relative flex items-center justify-end px-4 py-2 bg-transparent border-b border-gray-500/50 dark:border-gray-700 h-fit flex-shrink-0">
         <div className="absolute left-4 mx-auto flex items-center space-x-2 text-bold font-bold lg:max-w-[50%] text-blue-500">
           <Code className="w-4 h-4 mr-2" />{title}
