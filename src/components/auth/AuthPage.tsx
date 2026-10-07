@@ -63,8 +63,19 @@ const AuthPage: React.FC = () => {
         navigate('/');
       }, 1500);
       
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+    } catch (err: any) {
+      const code = err?.code || '';
+      const friendlyMessages: Record<string, string> = {
+        'auth/invalid-credential': 'Invalid email or password. Please check your credentials or sign up for a new account.',
+        'auth/user-not-found': 'No account found with this email. Please sign up first.',
+        'auth/wrong-password': 'Incorrect password. Please try again.',
+        'auth/email-already-in-use': 'This email is already registered. Please sign in instead.',
+        'auth/weak-password': 'Password is too weak. Please use at least 6 characters.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/too-many-requests': 'Too many failed attempts. Please try again later.',
+        'auth/network-request-failed': 'Network error. Please check your internet connection.',
+      };
+      setError(friendlyMessages[code] || (err instanceof Error ? err.message : 'An error occurred'));
     } finally {
       setLoading(false);
     }

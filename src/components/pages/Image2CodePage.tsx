@@ -18,8 +18,6 @@ const LANGUAGES = [
   { value: "nextjs", label: "Next.js" },
 ] as const;
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-
 export const Image2CodePage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [generatedCode, setGeneratedCode] = useState("");
@@ -84,40 +82,19 @@ export const Image2CodePage = () => {
 
       const prompt = `Generate ${selectedLanguage.toUpperCase()} code for this image. Provide clean, well-structured, production-ready code.`;
       
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${GROQ_API_KEY}`,
+      const { GoogleGenerativeAI } = await import("@google/generative-ai");
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+      const imagePart = {
+        inlineData: {
+          data: base64Image,
+          mimeType: selectedImage.type,
         },
-        body: JSON.stringify({
-          model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          messages: [
-            {
-              role: "user",
-              content: [
-                { type: "text", text: prompt },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: `data:${selectedImage.type};base64,${base64Image}`,
-                  },
-                },
-              ],
-            },
-          ],
-          max_tokens: 4096,
-          temperature: 0.7,
-        }),
-      });
+      };
 
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `API request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
-      setGeneratedCode(data.choices?.[0]?.message?.content || "No code generated.");
+      const result = await model.generateContent([prompt, imagePart]);
+      setGeneratedCode(await result.response.text());
     } catch (error: any) {
       const msg = error?.message || String(error);
       setError(`Error: ${msg}`);
